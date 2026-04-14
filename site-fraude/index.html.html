@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Processo Coletivo — Fraude em Aluguel de Carro</title>
+<style>
+:root{--bg:#fff;--bg2:#f5f5f3;--bg3:#eeedea;--text:#1a1a1a;--text2:#6b6b6b;--text3:#aaa;--info-bg:#e6f1fb;--info-text:#0c447c;--warn-bg:#faeeda;--warn-text:#854f0b;--danger-bg:#fcebeb;--danger-text:#a32d2d;--success-bg:#eaf3de;--success-text:#27500a;--purple-bg:#eeedfe;--purple-text:#3c3489;--border:rgba(0,0,0,0.13);--border2:rgba(0,0,0,0.22);--r:8px;--rl:12px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:'Courier New',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg2);color:var(--text);min-height:100vh}
+.wrap{max-width:880px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.hero{text-align:center;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:1.5rem;margin-bottom:1.2rem}
+.hero h1{font-size:21px;font-weight:700;margin-bottom:5px}
+.hero p{font-size:13px;color:var(--text2);line-height:1.6}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.1rem}
+.stat{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);padding:11px;text-align:center}
+.stat-n{font-size:21px;font-weight:700}
+.stat-l{font-size:11px;color:var(--text2);margin-top:2px}
+.tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1rem}
+.tab{padding:8px 15px;border:0.5px solid var(--border2);border-radius:var(--r);font-size:13px;cursor:pointer;background:var(--bg);color:var(--text2);font-family:var(--font);transition:all .15s}
+.tab:hover{background:var(--bg2)}
+.tab.on{background:var(--info-bg);border-color:#b5d4f4;color:var(--info-text);font-weight:600}
+.sec{display:none}.sec.on{display:block}
+/* form */
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:1rem 1.2rem;margin-bottom:1rem}
+.card-title{font-size:15px;font-weight:600;margin-bottom:12px;padding-bottom:8px;border-bottom:0.5px solid var(--border)}
+.stepper{display:flex;border:0.5px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:1.1rem}
+.stp{flex:1;padding:9px 3px;font-size:11px;text-align:center;cursor:pointer;border:none;background:var(--bg);color:var(--text2);border-right:0.5px solid var(--border);font-family:var(--font);line-height:1.3;transition:all .15s}
+.stp:last-child{border-right:none}
+.stp.done{background:var(--success-bg);color:var(--success-text)}
+.stp.on{background:var(--info-bg);color:var(--info-text);font-weight:600}
+.stp-n{display:block;font-size:10px;opacity:.7;margin-bottom:1px}
+.pg{display:none}.pg.on{display:block}
+lbl,.lbl{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:4px;margin-top:12px;display:block}
+.lbl:first-child{margin-top:0}
+input[type=text],input[type=date],textarea,select{width:100%;padding:8px 10px;border:0.5px solid var(--border2);border-radius:var(--r);font-size:13px;background:var(--bg);color:var(--text);font-family:var(--font);outline:none;transition:border-color .15s}
+input:focus,textarea:focus,select:focus{border-color:#378add}
+textarea{resize:vertical}
+.r2{display:flex;gap:8px}.r2>*{flex:1}
+.chk{display:flex;align-items:center;gap:8px;margin-top:7px}
+.chk input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:#378add;flex-shrink:0}
+.chk label{font-size:13px;cursor:pointer}
+.prob-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:6px}
+.prob{border:0.5px solid var(--border);border-radius:var(--r);padding:9px 11px;cursor:pointer;transition:all .15s;background:var(--bg)}
+.prob:hover{background:var(--bg2)}
+.prob.on{border-color:#f09595;background:var(--danger-bg)}
+.prob.on .pt{color:var(--danger-text)}
+.pt{font-size:13px;font-weight:600;margin-bottom:1px}
+.pd{font-size:11px;color:var(--text2)}
+.det{margin-top:7px;padding:10px;border:0.5px solid var(--border);border-radius:var(--r);background:var(--bg2);display:none}
+.det.on{display:block}
+/* buttons */
+.btn{padding:8px 16px;border:0.5px solid var(--border2);border-radius:var(--r);font-size:13px;cursor:pointer;background:var(--bg);color:var(--text);font-family:var(--font);transition:all .15s}
+.btn:hover{background:var(--bg2)}
+.btn-p{background:var(--info-bg);border-color:#b5d4f4;color:var(--info-text);font-weight:600}
+.btn-s{background:var(--success-bg);border-color:#c0dd97;color:var(--success-text);font-weight:600}
+.btn-d{background:var(--danger-bg);border-color:#f7c1c1;color:var(--danger-text)}
+.btn-sm{padding:4px 9px;font-size:12px}
+.nav{display:flex;justify-content:space-between;margin-top:1rem;gap:8px;align-items:center}
+/* boxes */
+.info{padding:9px 12px;border-radius:var(--r);font-size:13px;background:var(--info-bg);color:var(--info-text);margin-bottom:1rem;line-height:1.5}
+.warn{padding:9px 12px;border-radius:var(--r);font-size:13px;background:var(--warn-bg);color:var(--warn-text);margin-top:10px;line-height:1.5}
+.success{padding:9px 12px;border-radius:var(--r);font-size:13px;background:var(--success-bg);color:var(--success-text);margin-bottom:8px}
+/* file upload */
+.upload-zone{border:1.5px dashed var(--border2);border-radius:var(--rl);padding:1.2rem;text-align:center;cursor:pointer;transition:all .15s;margin-top:6px;background:var(--bg)}
+.upload-zone:hover{background:var(--bg2);border-color:#888}
+.upload-zone input[type=file]{display:none}
+.upload-zone p{font-size:13px;color:var(--text2);margin-top:4px}
+.upload-zone .uz-icon{font-size:28px;display:block;margin-bottom:4px}
+.file-list{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.file-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r)}
+.file-thumb{width:40px;height:40px;object-fit:cover;border-radius:4px;flex-shrink:0;border:0.5px solid var(--border)}
+.file-thumb-placeholder{width:40px;height:40px;border-radius:4px;flex-shrink:0;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;border:0.5px solid var(--border)}
+.file-info{flex:1;min-width:0}
+.file-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-size{font-size:11px;color:var(--text2)}
+.file-cat{font-size:11px;padding:2px 7px;border-radius:20px;margin-top:3px;display:inline-block}
+.cat-select{width:auto;font-size:12px;padding:3px 6px;margin-top:3px}
+/* titular */
+.tit-card{border:0.5px solid var(--border);border-radius:var(--rl);padding:12px;margin-bottom:10px;background:var(--bg)}
+.tit-card.primary{border-color:#b5d4f4;background:var(--info-bg)}
+.tit-label{font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.tit-card.primary .tit-label{color:var(--info-text)}
+.add-tit{border:1.5px dashed var(--border2);border-radius:var(--rl);padding:10px;text-align:center;cursor:pointer;font-size:13px;color:var(--text2);margin-bottom:12px;transition:all .15s;background:transparent;width:100%;font-family:var(--font)}
+.add-tit:hover{background:var(--bg2);color:var(--text)}
+.divider{border:none;border-top:0.5px solid var(--border);margin:14px 0}
+/* panel */
+.case-block{border:0.5px solid var(--border);border-radius:var(--rl);margin-bottom:1rem;overflow:hidden;background:var(--bg)}
+.case-hdr{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;background:var(--bg2);cursor:pointer;gap:8px}
+.case-hdr:hover{background:var(--bg3)}
+.case-name{font-size:14px;font-weight:600}
+.case-meta{font-size:12px;color:var(--text2);margin-top:1px}
+.case-badges{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.b-i{background:var(--info-bg);color:var(--info-text)}
+.b-w{background:var(--warn-bg);color:var(--warn-text)}
+.b-d{background:var(--danger-bg);color:var(--danger-text)}
+.b-s{background:var(--success-bg);color:var(--success-text)}
+.b-p{background:var(--purple-bg);color:var(--purple-text)}
+.b-g{background:var(--bg3);color:var(--text2)}
+.case-body{padding:14px}
+.case-body.hide{display:none}
+.tit-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tit-pill{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;border:0.5px solid var(--border);background:var(--bg2);font-size:12px}
+.av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.av-p{background:var(--info-bg);color:var(--info-text)}
+.av-s{background:var(--purple-bg);color:var(--purple-text)}
+.prob-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+/* timeline */
+.tl{display:flex;flex-direction:column}
+.tl-row{display:flex;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border)}
+.tl-row:last-child{border-bottom:none;padding-bottom:0}
+.tl-date{min-width:75px;text-align:right;font-size:11px;color:var(--text2);padding-top:3px;flex-shrink:0}
+.tl-mid{display:flex;flex-direction:column;align-items:center;margin:0 6px;flex-shrink:0}
+.tl-dot{width:9px;height:9px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.tl-line{flex:1;width:1px;background:var(--border);margin-top:3px}
+.tl-info{flex:1;min-width:0}
+.tl-t{font-size:13px;font-weight:600}
+.tl-d{font-size:12px;color:var(--text2);margin-top:2px;line-height:1.5}
+.dot-w{background:#1d9e75}.dot-p{background:#ba7517}.dot-c{background:#185fa5}.dot-pr{background:#993556}.dot-o{background:#888}
+/* attachments panel */
+.att-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-top:8px}
+.att-item{border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--bg2)}
+.att-img{width:100%;height:90px;object-fit:cover;display:block}
+.att-placeholder{width:100%;height:90px;display:flex;align-items:center;justify-content:center;font-size:28px;background:var(--bg3)}
+.att-label{font-size:11px;padding:5px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text2)}
+.att-cat-badge{font-size:10px;padding:1px 6px;border-radius:10px;margin:0 6px 5px;display:inline-block}
+/* summary output */
+.summary-box{border:0.5px solid var(--border);border-radius:var(--rl);padding:1rem;background:var(--bg2);white-space:pre-wrap;font-size:12px;line-height:1.8;color:var(--text);font-family:var(--mono);margin-top:10px}
+.empty{text-align:center;padding:2rem;color:var(--text2);font-size:14px}
+/* legal steps */
+.legal-steps{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:14px;margin-top:1rem}
+.legal-steps h3{font-size:14px;font-weight:600;margin-bottom:10px}
+.legal-steps ol{padding-left:18px}
+.legal-steps li{font-size:13px;color:var(--text2);margin-bottom:8px;line-height:1.5}
+.legal-steps li strong{color:var(--text)}
+.legal-steps a{color:#185fa5}
+@media(max-width:600px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .prob-grid{grid-template-columns:1fr}
+  .r2{flex-direction:column}
+  .stepper{flex-wrap:wrap}
+  .stp{flex:none;width:50%;border-bottom:0.5px solid var(--border)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hero">
+  <div style="font-size:26px;margin-bottom:6px">🇧🇷⚖️</div>
+  <h1>Processo Coletivo — Fraude em Aluguel de Carro</h1>
+  <p>Sistema de relato individual para brasileiros prejudicados na Austrália.<br>
+  Preencha o formulário, anexe suas provas e gere seu resumo para o advogado.</p>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-n" id="st-c">0</div><div class="stat-l">Casos</div></div>
+  <div class="stat"><div class="stat-n" id="st-p">0</div><div class="stat-l">Pessoas lesadas</div></div>
+  <div class="stat"><div class="stat-n" id="st-v">$0</div><div class="stat-l">Total lesado</div></div>
+  <div class="stat"><div class="stat-n" id="st-a">0</div><div class="stat-l">Arquivos anexados</div></div>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="mTab('painel',this)">Painel de casos</button>
+  <button class="tab" onclick="mTab('relato',this)">+ Novo relato</button>
+  <button class="tab" onclick="mTab('exportar',this)">Exportar / Resumo</button>
+</div>
+
+<!-- PAINEL -->
+<div class="sec on" id="sec-painel">
+  <div id="painel-content"><div class="empty">Nenhum caso registrado ainda.<br>Clique em "+ Novo relato" para começar.</div></div>
+</div>
+
+<!-- RELATO -->
+<div class="sec" id="sec-relato">
+  <div class="stepper">
+    <button class="stp on" onclick="gStep(0)"><span class="stp-n">1</span>Titulares</button>
+    <button class="stp" onclick="gStep(1)"><span class="stp-n">2</span>Carro</button>
+    <button class="stp" onclick="gStep(2)"><span class="stp-n">3</span>Problemas</button>
+    <button class="stp" onclick="gStep(3)"><span class="stp-n">4</span>Provas</button>
+    <button class="stp" onclick="gStep(4)"><span class="stp-n">5</span>Valores</button>
+    <button class="stp" onclick="gStep(5)"><span class="stp-n">6</span>Resumo</button>
+  </div>
+
+  <!-- STEP 1: TITULARES -->
+  <div class="pg on" id="pg-0">
+    <div class="info">Mesmo contrato com mais de uma pessoa? Adicione todos os titulares — cada um aparecerá no resumo final.</div>
+    <div id="tit-list">
+      <div class="tit-card primary">
+        <div class="tit-label">Titular principal</div>
+        <div class="r2">
+          <div><span class="lbl" style="margin-top:0">Nome completo</span><input type="text" id="t0-name" placeholder="Seu nome completo"></div>
+          <div><span class="lbl" style="margin-top:0">Contato (WhatsApp)</span><input type="text" id="t0-contact" placeholder="+61 ..."></div>
+        </div>
+      </div>
+    </div>
+    <button class="add-tit" onclick="addTit()">+ Adicionar co-titular (namorado/a, cônjuge, colega no mesmo contrato)</button>
+    <hr class="divider">
+    <span class="lbl">Tipo de acordo com o golpista</span>
+    <select id="f-deal">
+      <option value="">— Selecione —</option>
+      <option value="aluguel semanal (weekly rental)">Aluguel semanal</option>
+      <option value="aluguel mensal (monthly rental)">Aluguel mensal</option>
+      <option value="rent to own (compra parcelada)">Rent to own</option>
+      <option value="compra direta">Compra direta</option>
+      <option value="outro acordo">Outro</option>
+    </select>
+    <span class="lbl">Situação atual</span>
+    <select id="f-status">
+      <option value="">— Selecione —</option>
+      <option value="ainda está com o carro">Ainda está com o carro</option>
+      <option value="devolveu o carro">Devolveu o carro</option>
+      <option value="o carro foi tomado/recolhido">O carro foi tomado</option>
+      <option value="nunca recebeu o carro">Nunca recebeu o carro</option>
+    </select>
+    <div class="r2" style="margin-top:4px">
+      <div><span class="lbl">Início do acordo</span><input type="date" id="f-start"></div>
+      <div><span class="lbl">Data do problema principal</span><input type="date" id="f-end"></div>
+    </div>
+    <div class="nav"><span></span><button class="btn btn-p" onclick="gStep(1)">Próximo →</button></div>
+  </div>
+
+  <!-- STEP 2: CARRO -->
+  <div class="pg" id="pg-1">
+    <span class="lbl">Modelo e cor do carro</span>
+    <input type="text" id="f-model" placeholder="Ex: Toyota Corolla 2015, prata">
+    <div class="r2">
+      <div><span class="lbl">Placa</span><input type="text" id="f-plate" placeholder="Ex: ABC 123"></div>
+      <div><span class="lbl">REGO (registro)</span>
+        <select id="f-rego">
+          <option value="">—</option>
+          <option value="REGO válido">Válido</option>
+          <option value="sem REGO">Sem REGO</option>
+          <option value="REGO vencido">Vencido</option>
+          <option value="REGO desconhecido">Não sei</option>
+        </select>
+      </div>
+    </div>
+    <span class="lbl">Como o contato era feito com o golpista?</span>
+    <div class="chk"><input type="checkbox" id="ch-wa"><label for="ch-wa">WhatsApp (principal)</label></div>
+    <div class="chk"><input type="checkbox" id="ch-sms"><label for="ch-sms">SMS</label></div>
+    <div class="chk"><input type="checkbox" id="ch-em"><label for="ch-em">E-mail</label></div>
+    <div class="chk"><input type="checkbox" id="ch-pess"><label for="ch-pess">Pessoalmente</label></div>
+    <span class="lbl">Havia contrato escrito?</span>
+    <select id="f-contract">
+      <option value="">—</option>
+      <option value="contrato formal assinado">Sim, contrato formal assinado</option>
+      <option value="acordo informal/simples">Sim, mas simples e informal</option>
+      <option value="apenas acordo verbal ou por WhatsApp">Só verbal / WhatsApp</option>
+      <option value="nenhum contrato">Nenhum contrato</option>
+    </select>
+    <span class="lbl">Condição do carro ao receber</span>
+    <textarea id="f-cond" placeholder="Descreva os defeitos visíveis, problemas mecânicos, estado geral..." style="min-height:70px"></textarea>
+    <div class="nav"><button class="btn" onclick="gStep(0)">← Voltar</button><button class="btn btn-p" onclick="gStep(2)">Próximo →</button></div>
+  </div>
+
+  <!-- STEP 3: PROBLEMAS -->
+  <div class="pg" id="pg-2">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:10px">Selecione todos os problemas que você enfrentou:</p>
+    <div class="prob-grid">
+      <div class="prob" id="pb-bond" onclick="tProb('bond')"><div class="pt">Bond retido</div><div class="pd">Não devolveram o bond / caução</div></div>
+      <div class="prob" id="pb-multa" onclick="tProb('multa')"><div class="pt">Multas / tolls indevidos</div><div class="pd">Cobranças que não eram suas</div></div>
+      <div class="prob" id="pb-mec" onclick="tProb('mec')"><div class="pt">Defeitos mecânicos</div><div class="pd">Problemas não informados</div></div>
+      <div class="prob" id="pb-rego" onclick="tProb('rego')"><div class="pt">Sem REGO / REGO inválido</div><div class="pd">Carro irregular na via</div></div>
+      <div class="prob" id="pb-doc" onclick="tProb('doc')"><div class="pt">Problemas com documentos</div><div class="pd">Transferência, título, papelada</div></div>
+      <div class="prob" id="pb-rto" onclick="tProb('rto')"><div class="pt">Rent to own não cumprido</div><div class="pd">Pagou mas não transferiu</div></div>
+      <div class="prob" id="pb-ne" onclick="tProb('ne')"><div class="pt">Carro não entregue</div><div class="pd">Pagou e nunca recebeu</div></div>
+      <div class="prob" id="pb-out" onclick="tProb('out')"><div class="pt">Outro problema</div><div class="pd">Não listado acima</div></div>
+    </div>
+    <div class="det" id="dt-bond"><span class="lbl">Valor do bond</span><input type="text" id="bond-v" placeholder="AUD $"><span class="lbl">Data que devia ser devolvido</span><input type="date" id="bond-d"><span class="lbl">O que aconteceu?</span><textarea id="bond-t" style="min-height:55px" placeholder="Descreva..."></textarea></div>
+    <div class="det" id="dt-multa"><span class="lbl">Valor cobrado indevidamente</span><input type="text" id="multa-v" placeholder="AUD $"><span class="lbl">Tipo</span><select id="multa-tp"><option value="multas de trânsito">Multas de trânsito</option><option value="tolls (pedágios)">Tolls</option><option value="multas e tolls">Ambos</option></select><span class="lbl">Detalhe</span><textarea id="multa-t" style="min-height:50px" placeholder="Descreva..."></textarea></div>
+    <div class="det" id="dt-mec"><span class="lbl">Quais defeitos?</span><textarea id="mec-t" style="min-height:65px" placeholder="Freios, motor, pneus, elétrica, ar-condicionado..."></textarea></div>
+    <div class="det" id="dt-rego"><span class="lbl">Consequências do REGO inválido</span><textarea id="rego-t" style="min-height:55px" placeholder="Ex: multado pela polícia, impossibilitado de trabalhar..."></textarea></div>
+    <div class="det" id="dt-doc"><span class="lbl">Qual problema com documentos?</span><textarea id="doc-t" style="min-height:55px" placeholder="Transferência não feita, título ainda no nome dele..."></textarea></div>
+    <div class="det" id="dt-rto"><span class="lbl">Total já pago</span><input type="text" id="rto-v" placeholder="AUD $"><span class="lbl">O que foi prometido e não cumprido?</span><textarea id="rto-t" style="min-height:55px" placeholder="Descreva..."></textarea></div>
+    <div class="det" id="dt-ne"><span class="lbl">Valor pago</span><input type="text" id="ne-v" placeholder="AUD $"><span class="lbl">O que foi combinado e não entregue?</span><textarea id="ne-t" style="min-height:55px" placeholder="Descreva..."></textarea></div>
+    <div class="det" id="dt-out"><span class="lbl">Descreva o problema</span><textarea id="out-t" style="min-height:65px" placeholder="Descreva..."></textarea></div>
+    <div class="nav"><button class="btn" onclick="gStep(1)">← Voltar</button><button class="btn btn-p" onclick="gStep(3)">Próximo →</button></div>
+  </div>
+
+  <!-- STEP 4: PROVAS / ANEXOS -->
+  <div class="pg" id="pg-3">
+    <div class="info">Anexe aqui todas as suas provas. As imagens ficam salvas localmente no seu dispositivo — nada é enviado para a internet.</div>
+
+    <div class="card" style="margin-top:0">
+      <div class="card-title">💬 Conversas de WhatsApp</div>
+      <label class="upload-zone" for="up-whats">
+        <input type="file" id="up-whats" accept="image/*,.pdf" multiple onchange="addFiles(this,'whatsapp','💬')">
+        <span class="uz-icon">💬</span>
+        <strong style="font-size:13px">Selecionar prints de WhatsApp</strong>
+        <p>Fotos, screenshots das conversas</p>
+      </label>
+      <div class="file-list" id="fl-whats"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💳 Comprovantes de pagamento</div>
+      <label class="upload-zone" for="up-pag">
+        <input type="file" id="up-pag" accept="image/*,.pdf" multiple onchange="addFiles(this,'pagamento','💳')">
+        <span class="uz-icon">💳</span>
+        <strong style="font-size:13px">Selecionar comprovantes</strong>
+        <p>Transferências, recibos, PayID, PayPal</p>
+      </label>
+      <div class="file-list" id="fl-pag"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📄 Contratos e acordos</div>
+      <label class="upload-zone" for="up-cont">
+        <input type="file" id="up-cont" accept="image/*,.pdf" multiple onchange="addFiles(this,'contrato','📄')">
+        <span class="uz-icon">📄</span>
+        <strong style="font-size:13px">Selecionar contratos</strong>
+        <p>PDF ou foto do contrato assinado</p>
+      </label>
+      <div class="file-list" id="fl-cont"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📸 Fotos do carro / outros prints</div>
+      <label class="upload-zone" for="up-foto">
+        <input type="file" id="up-foto" accept="image/*,.pdf" multiple onchange="addFiles(this,'foto','📸')">
+        <span class="uz-icon">📸</span>
+        <strong style="font-size:13px">Selecionar fotos e prints</strong>
+        <p>Estado do carro, defeitos, anúncios, outros</p>
+      </label>
+      <div class="file-list" id="fl-foto"></div>
+    </div>
+
+    <span class="lbl">Descrição adicional das provas</span>
+    <textarea id="f-proof-desc" placeholder="Descreva brevemente o que cada prova mostra, se necessário..." style="min-height:65px"></textarea>
+
+    <div class="nav"><button class="btn" onclick="gStep(2)">← Voltar</button><button class="btn btn-p" onclick="gStep(4)">Próximo →</button></div>
+  </div>
+
+  <!-- STEP 5: VALORES -->
+  <div class="pg" id="pg-4">
+    <span class="lbl">Total pago ao golpista</span>
+    <input type="text" id="f-total" placeholder="AUD $">
+    <span class="lbl">Valor estimado perdido / não recuperado</span>
+    <input type="text" id="f-lost" placeholder="AUD $">
+    <span class="lbl">Formas de pagamento utilizadas</span>
+    <div class="chk"><input type="checkbox" id="pay-tr"><label for="pay-tr">Bank transfer (transferência bancária)</label></div>
+    <div class="chk"><input type="checkbox" id="pay-ca"><label for="pay-ca">Cash (dinheiro em espécie)</label></div>
+    <div class="chk"><input type="checkbox" id="pay-pi"><label for="pay-pi">PayID</label></div>
+    <div class="chk"><input type="checkbox" id="pay-pp"><label for="pay-pp">PayPal</label></div>
+    <span class="lbl">Tem comprovantes de pagamento?</span>
+    <select id="f-rec">
+      <option value="">—</option>
+      <option value="sim, todos os comprovantes">Sim, todos</option>
+      <option value="alguns comprovantes">Alguns</option>
+      <option value="não possui comprovantes">Não tenho</option>
+    </select>
+    <span class="lbl">Outras vítimas que você conhece</span>
+    <textarea id="f-wit" placeholder="Nomes ou contatos de outras pessoas prejudicadas..." style="min-height:55px"></textarea>
+    <span class="lbl">Informações adicionais importantes</span>
+    <textarea id="f-extra" placeholder="Qualquer outro detalhe relevante para o processo..." style="min-height:65px"></textarea>
+    <div class="nav"><button class="btn" onclick="gStep(3)">← Voltar</button><button class="btn btn-p" onclick="saveCase()">Salvar e gerar resumo →</button></div>
+  </div>
+
+  <!-- STEP 6: RESUMO -->
+  <div class="pg" id="pg-5">
+    <div class="success" id="saved-ok" style="display:none">✓ Caso salvo no painel!</div>
+    <div id="resumo-wrap"></div>
+    <div class="warn">⚠️ Este resumo é um rascunho. Leve ao advogado ou a um Justice of the Peace (JP) para assinar como Statutory Declaration — serviço gratuito em bibliotecas e Service NSW.</div>
+    <div class="nav" style="margin-top:1rem">
+      <button class="btn" onclick="gStep(4)">← Voltar</button>
+      <div style="display:flex;gap:7px">
+        <button class="btn" onclick="mTab('painel',null);renderPanel()">Ver painel</button>
+        <button class="btn btn-p" onclick="resetForm()">+ Novo relato</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORTAR -->
+<div class="sec" id="sec-exportar">
+  <div class="card">
+    <div class="card-title">Resumo coletivo em inglês</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:10px">Documento formal com todos os casos — ideal para NSW Fair Trading, ACCC ou advogado.</p>
+    <button class="btn btn-p" onclick="genCollective()">Gerar resumo coletivo</button>
+    <div id="col-out" style="display:none">
+      <div class="summary-box" id="col-txt"></div>
+      <button class="btn btn-sm btn-s" style="margin-top:8px" onclick="copyEl('col-txt')">Copiar resumo</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Exportar todos os casos em texto</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:10px">Lista completa para copiar, salvar ou imprimir.</p>
+    <button class="btn" onclick="exportAll()">Exportar</button>
+    <div id="exp-out" style="display:none;margin-top:10px">
+      <textarea id="exp-txt" style="min-height:220px;font-size:12px;font-family:var(--mono);width:100%;padding:10px;border:0.5px solid var(--border);border-radius:var(--r);background:var(--bg2);color:var(--text)" readonly></textarea>
+      <button class="btn btn-sm" style="margin-top:6px" onclick="copyEl('exp-txt')">Copiar tudo</button>
+    </div>
+  </div>
+
+  <div class="legal-steps">
+    <h3>Próximos passos em NSW</h3>
+    <ol>
+      <li><strong>NSW Fair Trading</strong> — <a href="https://www.fair.trading.nsw.gov.au" target="_blank">fair.trading.nsw.gov.au</a> — denúncia de fraude em aluguel</li>
+      <li><strong>ACCC</strong> — <a href="https://www.accc.gov.au/consumers/complaints-problems" target="_blank">accc.gov.au</a> — prática comercial enganosa</li>
+      <li><strong>NSW Police</strong> — <a href="https://www.police.nsw.gov.au" target="_blank">police.nsw.gov.au</a> — boletim de ocorrência (fraud report)</li>
+      <li><strong>Legal Aid NSW</strong> — <a href="https://www.legalaid.nsw.gov.au" target="_blank">legalaid.nsw.gov.au</a> — consulta jurídica gratuita</li>
+      <li><strong>NCAT</strong> — <a href="https://www.ncat.nsw.gov.au" target="_blank">ncat.nsw.gov.au</a> — tribunal de pequenas causas (até $30.000)</li>
+      <li><strong>Justice of the Peace (JP)</strong> — para assinar a Statutory Declaration gratuitamente. Procure em bibliotecas, Service NSW ou prefeituras.</li>
+    </ol>
+  </div>
+</div>
+
+</div>
+<script>
+let cases=[];
+let selProbs=new Set();
+let titCount=1;
+let attachments={whatsapp:[],pagamento:[],contrato:[],foto:[]};
+
+// tabs
+function mTab(name,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sec-'+name).classList.add('on');
+  if(el) el.classList.add('on');
+  else document.querySelectorAll('.tab').forEach(t=>{if(t.textContent.includes('Painel'))t.classList.add('on');});
+  if(name==='painel') renderPanel();
+}
+
+// steps
+function gStep(n){
+  document.querySelectorAll('.pg').forEach((p,i)=>p.classList.toggle('on',i===n));
+  document.querySelectorAll('.stp').forEach((b,i)=>{b.classList.remove('on','done');if(i===n)b.classList.add('on');else if(i<n)b.classList.add('done');});
+}
+
+// titulares
+function addTit(){
+  const idx=titCount++;
+  const d=document.createElement('div');
+  d.className='tit-card';d.id='tc-'+idx;
+  d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="tit-label">Co-titular ${idx}</div><button class="btn btn-sm btn-d" onclick="document.getElementById('tc-${idx}').remove()">Remover</button></div><div class="r2"><div><span class="lbl" style="margin-top:0">Nome completo</span><input type="text" id="t${idx}-name" placeholder="Nome do co-titular"></div><div><span class="lbl" style="margin-top:0">Contato</span><input type="text" id="t${idx}-contact" placeholder="+61 ..."></div></div>`;
+  document.getElementById('tit-list').appendChild(d);
+}
+
+function getTits(){
+  const list=[];
+  for(let i=0;i<titCount;i++){
+    const el=document.getElementById('t'+i+'-name');
+    if(el&&el.value.trim()) list.push({name:el.value.trim(),contact:(document.getElementById('t'+i+'-contact')||{}).value||''});
+  }
+  return list;
+}
+
+// problems
+function tProb(id){
+  const c=document.getElementById('pb-'+id);
+  const d=document.getElementById('dt-'+id);
+  if(selProbs.has(id)){selProbs.delete(id);c.classList.remove('on');d.classList.remove('on');}
+  else{selProbs.add(id);c.classList.add('on');d.classList.add('on');}
+}
+
+function g(id){return(document.getElementById(id)||{}).value||'';}
+function ck(id){return!!(document.getElementById(id)&&document.getElementById(id).checked);}
+function fd(d){if(!d)return'';const[y,m,day]=d.split('-');return`${day}/${m}/${y}`;}
+function nv(s){return parseFloat((s||'').replace(/[^0-9.]/g,''))||0;}
+function ini(n){return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+
+// file attachments
+function addFiles(input,cat,icon){
+  const files=Array.from(input.files);
+  const listEl=document.getElementById('fl-'+{whatsapp:'whats',pagamento:'pag',contrato:'cont',foto:'foto'}[cat]);
+  files.forEach(file=>{
+    const reader=new FileReader();
+    const obj={id:Date.now()+Math.random(),name:file.name,size:file.size,cat,icon,type:file.type,dataUrl:null};
+    attachments[cat].push(obj);
+    reader.onload=e=>{
+      obj.dataUrl=e.target.result;
+      renderFileItem(obj,listEl);
+      updateStats();
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value='';
+}
+
+function renderFileItem(obj,listEl){
+  const div=document.createElement('div');
+  div.className='file-item';div.id='fi-'+obj.id;
+  const isImg=obj.type&&obj.type.startsWith('image/');
+  div.innerHTML=`${isImg?`<img class="file-thumb" src="${obj.dataUrl}" alt="">`:`<div class="file-thumb-placeholder">${obj.icon}</div>`}<div class="file-info"><div class="file-name">${obj.name}</div><div class="file-size">${(obj.size/1024).toFixed(1)} KB</div></div><button class="btn btn-sm btn-d" onclick="removeFile('${obj.id}','${obj.cat}')">✕</button>`;
+  listEl.appendChild(div);
+}
+
+function removeFile(id,cat){
+  attachments[cat]=attachments[cat].filter(f=>String(f.id)!==String(id));
+  const el=document.getElementById('fi-'+id);if(el)el.remove();
+  updateStats();
+}
+
+function totalAttachments(){return Object.values(attachments).reduce((s,a)=>s+a.length,0);}
+
+// build problems list
+function buildProbs(){
+  const p=[];
+  if(selProbs.has('bond'))p.push({id:'bond',label:'Bond retido',value:g('bond-v'),date:g('bond-d'),detail:g('bond-t')});
+  if(selProbs.has('multa'))p.push({id:'multa',label:'Multas/tolls indevidos',value:g('multa-v'),tipo:g('multa-tp'),detail:g('multa-t')});
+  if(selProbs.has('mec'))p.push({id:'mec',label:'Defeitos mecânicos',detail:g('mec-t')});
+  if(selProbs.has('rego'))p.push({id:'rego',label:'Sem REGO / REGO inválido',detail:g('rego-t')});
+  if(selProbs.has('doc'))p.push({id:'doc',label:'Problemas com documentos',detail:g('doc-t')});
+  if(selProbs.has('rto'))p.push({id:'rto',label:'Rent to own não cumprido',value:g('rto-v'),detail:g('rto-t')});
+  if(selProbs.has('ne'))p.push({id:'ne',label:'Carro não entregue',value:g('ne-v'),detail:g('ne-t')});
+  if(selProbs.has('out'))p.push({id:'out',label:'Outro',detail:g('out-t')});
+  return p;
+}
+
+// generate summary text
+function genSummary(c){
+  const tits=c.titulares.map((t,i)=>i===0?t.name+' (titular principal)':t.name+' (co-titular)').join(' e ');
+  const pays=c.pays.join(', ')||'não especificado';
+  const contacts=c.contacts.join(', ')||'WhatsApp';
+  const atts=Object.entries(c.attachments).map(([k,v])=>v.length?`${v.length} arquivo(s) de ${k}`:null).filter(Boolean).join(', ')||'nenhum arquivo anexado';
+
+  const probLines=c.probs.map(p=>{
+    let line=`\n  • ${p.label}`;
+    if(p.value) line+=` — Valor: ${p.value}`;
+    if(p.date) line+=` — Data: ${fd(p.date)}`;
+    if(p.detail) line+=`\n    Detalhes: ${p.detail}`;
+    return line;
+  }).join('');
+
+  const ptText=`
+STATUTORY DECLARATION — WITNESS STATEMENT
+==========================================
+Case: Fraudulent Car Rental / Vehicle Sale Scheme
+Jurisdiction: New South Wales, Australia
+Date prepared: ${new Date().toLocaleDateString('en-AU',{day:'2-digit',month:'long',year:'numeric'})}
+
+DECLARANT(S)
+${c.titulares.map((t,i)=>`${i+1}. ${t.name}${t.contact?' — Contact: '+t.contact:''} ${i===0?'(Primary Declarant)':'(Co-Declarant)'}`).join('\n')}
+
+DECLARATION
+I/We, ${tits}, hereby declare the following to be true and correct to the best of my/our knowledge and belief:
+
+1. AGREEMENT
+On or around ${fd(c.start)}, I/we entered into a ${c.deal} arrangement for a vehicle described as ${c.model||'[vehicle]'}, registration plate ${c.plate||'[plate]'}, with registration status: ${c.rego||'unknown'}.
+
+The agreement was documented as: ${c.contract}.
+All communications with the other party were conducted primarily via: ${contacts}.
+
+2. VEHICLE CONDITION
+Upon taking possession of the vehicle, the following issues were noted:
+${c.cond||'Not specified.'}
+
+3. PROBLEMS EXPERIENCED
+The following issues arose during or after the agreement period (${fd(c.start)} to ${fd(c.end)}):${probLines||'\n  No specific issues recorded.'}
+
+4. FINANCIAL DETAILS
+Total amount paid: ${c.total||'Not specified'}
+Estimated financial loss: ${c.lost||'Not specified'}
+Payment method(s): ${pays}
+Payment evidence: ${c.receipts||'Not specified'}
+
+5. EVIDENCE
+The following evidence is available to support this declaration:
+${atts}
+${c.proofDesc?'Additional evidence notes: '+c.proofDesc:''}
+
+6. OTHER KNOWN VICTIMS
+${c.witnesses||'Not specified.'}
+
+7. ADDITIONAL INFORMATION
+${c.extra||'None.'}
+
+DECLARATION OF TRUTH
+I/We declare that the information contained in this statement is true and correct to the best of my/our knowledge and belief, and I/we make this solemn declaration by virtue of the Oaths Act 1900 (NSW).
+
+${c.titulares.map(t=>`Signature: _______________________\nFull name: ${t.name}\nDate: _____ / _____ / _______\nWitness (JP/Solicitor): _______________________\n`).join('\n')}
+==========================================
+  `;
+  return ptText.trim();
+}
+
+// save case
+function saveCase(){
+  const tits=getTits();
+  if(!tits.length){alert('Informe o nome do titular principal.');gStep(0);return;}
+  const pays=[];
+  if(ck('pay-tr'))pays.push('bank transfer');
+  if(ck('pay-ca'))pays.push('cash');
+  if(ck('pay-pi'))pays.push('PayID');
+  if(ck('pay-pp'))pays.push('PayPal');
+  const contacts=[];
+  if(ck('ch-wa'))contacts.push('WhatsApp');
+  if(ck('ch-sms'))contacts.push('SMS');
+  if(ck('ch-em'))contacts.push('e-mail');
+  if(ck('ch-pess'))contacts.push('pessoalmente');
+
+  const c={
+    id:Date.now(),titulares:tits,
+    deal:g('f-deal'),status:g('f-status'),start:g('f-start'),end:g('f-end'),
+    model:g('f-model'),plate:g('f-plate'),rego:g('f-rego'),
+    contacts,contract:g('f-contract'),cond:g('f-cond'),
+    probs:buildProbs(),
+    attachments:JSON.parse(JSON.stringify(attachments)),
+    proofDesc:g('f-proof-desc'),
+    total:g('f-total'),lost:g('f-lost'),pays,receipts:g('f-rec'),
+    witnesses:g('f-wit'),extra:g('f-extra'),
+  };
+  c.summary=genSummary(c);
+  cases.push(c);
+  updateStats();
+  gStep(5);
+  document.getElementById('saved-ok').style.display='block';
+  const wrap=document.getElementById('resumo-wrap');
+  wrap.innerHTML='';
+  c.titulares.forEach((t,i)=>{
+    const div=document.createElement('div');
+    div.style.marginBottom='1rem';
+    div.innerHTML=`
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:7px">
+        <div class="av ${i===0?'av-p':'av-s'}">${ini(t.name)}</div>
+        <div>
+          <div style="font-size:14px;font-weight:600">${t.name}</div>
+          <div style="font-size:12px;color:var(--text2)">${i===0?'Titular principal':'Co-titular'}</div>
+        </div>
+      </div>
+      <div class="summary-box" id="sum-${c.id}-${i}">${c.summary.replace(/</g,'&lt;')}</div>
+      <div style="display:flex;gap:7px;margin-top:8px;flex-wrap:wrap">
+        <button class="btn btn-sm btn-s" onclick="copyEl('sum-${c.id}-${i}')">Copiar declaração de ${t.name}</button>
+      </div>`;
+    wrap.appendChild(div);
+  });
+}
+
+function updateStats(){
+  document.getElementById('st-c').textContent=cases.length;
+  document.getElementById('st-p').textContent=cases.reduce((s,c)=>s+c.titulares.length,0);
+  document.getElementById('st-v').textContent='$'+Math.round(cases.reduce((s,c)=>s+nv(c.total),0)).toLocaleString();
+  document.getElementById('st-a').textContent=cases.reduce((s,c)=>s+Object.values(c.attachments).reduce((x,a)=>x+a.length,0),0)+totalAttachments();
+}
+
+const probColors={bond:'b-w',multa:'b-w',mec:'b-d',rego:'b-d',doc:'b-d',rto:'b-d',ne:'b-d',out:'b-g'};
+const catDot={whatsapp:'dot-w',pagamento:'dot-p',contrato:'dot-c',foto:'dot-pr'};
+const catIcon={whatsapp:'💬',pagamento:'💳',contrato:'📄',foto:'📸'};
+
+function renderPanel(){
+  const c=document.getElementById('painel-content');
+  if(!cases.length){c.innerHTML='<div class="empty">Nenhum caso registrado ainda.<br>Clique em "+ Novo relato" para começar.</div>';return;}
+  c.innerHTML=cases.map(cas=>{
+    const totalAtt=Object.values(cas.attachments).reduce((s,a)=>s+a.length,0);
+    const allAtts=Object.entries(cas.attachments).flatMap(([cat,files])=>files.map(f=>({...f,cat})));
+    return `
+    <div class="case-block">
+      <div class="case-hdr" onclick="document.getElementById('cb-${cas.id}').classList.toggle('hide')">
+        <div>
+          <div class="case-name">${cas.titulares.map(t=>t.name).join(' & ')}</div>
+          <div class="case-meta">${cas.deal||''}${cas.model?' · '+cas.model:''}${cas.plate?' ('+cas.plate+')':''}</div>
+        </div>
+        <div class="case-badges">
+          ${cas.titulares.length>1?`<span class="badge b-p">${cas.titulares.length} titulares</span>`:''}
+          ${cas.total?`<span class="badge b-w">${cas.total}</span>`:''}
+          ${totalAtt?`<span class="badge b-i">${totalAtt} arquivos</span>`:''}
+          <span class="badge b-s">Declaração pronta</span>
+          <button class="btn btn-sm btn-d" onclick="event.stopPropagation();if(confirm('Remover este caso?')){cases=cases.filter(x=>x.id!==${cas.id});updateStats();renderPanel()}">Remover</button>
+        </div>
+      </div>
+      <div class="case-body" id="cb-${cas.id}">
+        <div class="tit-pills">
+          ${cas.titulares.map((t,i)=>`<div class="tit-pill"><div class="av ${i===0?'av-p':'av-s'}">${ini(t.name)}</div><span style="font-weight:600">${t.name}</span><span style="color:var(--text2)">${i===0?'principal':'co-titular'}</span></div>`).join('')}
+        </div>
+        ${cas.probs.length?`<div class="prob-tags">${cas.probs.map(p=>`<span class="badge ${probColors[p.id]||'b-g'}">${p.label}${p.value?' ('+p.value+')':''}</span>`).join('')}</div>`:''}
+
+        ${allAtts.length?`
+        <div style="margin-bottom:12px">
+          <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em">Arquivos anexados (${allAtts.length})</div>
+          <div class="att-grid">
+            ${allAtts.map(f=>`
+              <div class="att-item">
+                ${f.dataUrl&&f.type&&f.type.startsWith('image/')?`<img class="att-img" src="${f.dataUrl}" alt="">`:`<div class="att-placeholder">${f.icon||'📎'}</div>`}
+                <div class="att-label">${f.name}</div>
+                <span class="att-cat-badge b-g badge">${catIcon[f.cat]||''} ${f.cat}</span>
+              </div>`).join('')}
+          </div>
+        </div>`:''}
+
+        <div style="border-top:0.5px solid var(--border);padding-top:12px;margin-top:4px">
+          <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em">Declaração gerada</div>
+          <div class="summary-box" id="sp-${cas.id}" style="display:none">${(cas.summary||'').replace(/</g,'&lt;')}</div>
+          <div style="display:flex;gap:7px;flex-wrap:wrap">
+            <button class="btn btn-sm btn-s" onclick="copyEl('sp-${cas.id}')">Copiar declaração</button>
+            <button class="btn btn-sm" onclick="const e=document.getElementById('sp-${cas.id}');e.style.display=e.style.display==='none'?'block':'none'">Ver / ocultar</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function genCollective(){
+  if(!cases.length){alert('Adicione casos primeiro.');return;}
+  const lines=cases.map((c,i)=>{
+    const tits=c.titulares.map(t=>t.name).join(' & ');
+    const probs=c.probs.map(p=>p.label+(p.value?' ('+p.value+')':'')).join('; ')||'None specified';
+    const atts=Object.entries(c.attachments).map(([k,v])=>v.length?`${v.length} ${k} file(s)`:null).filter(Boolean).join(', ')||'None';
+    return `CASE ${i+1}: ${tits}
+Vehicle: ${c.model||'N/A'} | Plate: ${c.plate||'N/A'} | REGO: ${c.rego||'N/A'}
+Agreement: ${c.deal||'N/A'} | Period: ${fd(c.start)} to ${fd(c.end)}
+Total paid: ${c.total||'N/A'} | Estimated loss: ${c.lost||'N/A'}
+Problems: ${probs}
+Evidence: ${atts}`;
+  }).join('\n\n---\n\n');
+
+  const summary=`COLLECTIVE CASE SUMMARY
+Fraudulent Car Rental / Vehicle Sales Scheme — Brazilian Nationals in NSW, Australia
+Prepared: ${new Date().toLocaleDateString('en-AU',{day:'2-digit',month:'long',year:'numeric'})}
+Total cases: ${cases.length} | Total persons affected: ${cases.reduce((s,c)=>s+c.titulares.length,0)} | Total financial harm: AUD $${Math.round(cases.reduce((s,c)=>s+nv(c.total),0)).toLocaleString()}
+
+OVERVIEW
+This document summarises complaints made by Brazilian nationals residing in New South Wales, Australia, who were victims of a fraudulent car rental and vehicle sales scheme. The alleged perpetrator engaged in a pattern of deceptive conduct including: renting vehicles without valid registration (REGO), withholding security bonds without justification, charging unlawful fines and toll fees, failing to honour rent-to-own agreements, providing vehicles with undisclosed mechanical defects, and failing to deliver vehicles after receiving payment. Communications were conducted primarily via WhatsApp, and contracts were either absent or highly informal in nature.
+
+INDIVIDUAL CASES
+${lines}
+
+This summary has been compiled from individual statutory declarations and supporting evidence provided by each victim. All declarants assert the truth of their statements to the best of their knowledge and belief.`;
+
+  document.getElementById('col-txt').textContent=summary;
+  document.getElementById('col-out').style.display='block';
+}
+
+function exportAll(){
+  if(!cases.length){alert('Nenhum caso para exportar.');return;}
+  const txt=cases.map((c,i)=>{
+    const atts=Object.entries(c.attachments).map(([k,v])=>v.length?`  ${catIcon[k]} ${k}: ${v.map(f=>f.name).join(', ')}`:null).filter(Boolean).join('\n')||'  Nenhum arquivo';
+    return [
+      `CASO #${i+1}: ${c.titulares.map(t=>t.name).join(' & ')}`,
+      `Titulares: ${c.titulares.map(t=>t.name+(t.contact?' ('+t.contact+')':'')).join(' | ')}`,
+      `Carro: ${c.model} (${c.plate}) — REGO: ${c.rego}`,
+      `Acordo: ${c.deal} | Período: ${fd(c.start)} a ${fd(c.end)}`,
+      `Status: ${c.status}`,
+      `Total pago: ${c.total} | Perda estimada: ${c.lost}`,
+      `Pagamento: ${c.pays.join(', ')||'—'} | Comprovantes: ${c.receipts}`,
+      `Problemas: ${c.probs.map(p=>p.label+(p.value?' ('+p.value+')':'')).join('; ')||'—'}`,
+      `Arquivos anexados:\n${atts}`,
+      c.witnesses?`Outras vítimas: ${c.witnesses}`:'',
+      c.extra?`Obs: ${c.extra}`:'',
+      '═'.repeat(55)
+    ].filter(Boolean).join('\n');
+  }).join('\n\n');
+  document.getElementById('exp-txt').value=txt;
+  document.getElementById('exp-out').style.display='block';
+}
+
+function resetForm(){
+  document.getElementById('tit-list').innerHTML=`<div class="tit-card primary"><div class="tit-label">Titular principal</div><div class="r2"><div><span class="lbl" style="margin-top:0">Nome completo</span><input type="text" id="t0-name" placeholder="Seu nome completo"></div><div><span class="lbl" style="margin-top:0">Contato (WhatsApp)</span><input type="text" id="t0-contact" placeholder="+61 ..."></div></div></div>`;
+  titCount=1;
+  ['f-deal','f-status','f-start','f-end','f-model','f-plate','f-rego','f-contract','f-cond','f-total','f-lost','f-rec','f-wit','f-extra','f-proof-desc','bond-v','bond-d','bond-t','multa-v','multa-t','mec-t','rego-t','doc-t','rto-v','rto-t','ne-v','ne-t','out-t'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['ch-wa','ch-sms','ch-em','ch-pess','pay-tr','pay-ca','pay-pi','pay-pp'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
+  selProbs.forEach(id=>{const c=document.getElementById('pb-'+id);if(c)c.classList.remove('on');const d=document.getElementById('dt-'+id);if(d)d.classList.remove('on');});
+  selProbs.clear();
+  attachments={whatsapp:[],pagamento:[],contrato:[],foto:[]};
+  ['fl-whats','fl-pag','fl-cont','fl-foto'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});
+  document.getElementById('saved-ok').style.display='none';
+  document.getElementById('resumo-wrap').innerHTML='';
+  gStep(0);
+}
+
+function copyEl(id){
+  const el=document.getElementById(id);
+  const text=el.tagName==='TEXTAREA'?el.value:el.innerText;
+  navigator.clipboard.writeText(text).then(()=>alert('Copiado!')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('Copiado!');
+  });
+}
+</script>
+</body>
+</html>
