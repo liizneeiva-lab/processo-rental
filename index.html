@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Processo Coletivo — Fraude em Aluguel de Carro</title>
+<style>
+:root{--bg:#fff;--bg2:#f5f5f3;--bg3:#eeedea;--text:#1a1a1a;--text2:#6b6b6b;--info-bg:#e6f1fb;--info-text:#0c447c;--warn-bg:#faeeda;--warn-text:#854f0b;--danger-bg:#fcebeb;--danger-text:#a32d2d;--success-bg:#eaf3de;--success-text:#27500a;--purple-bg:#eeedfe;--purple-text:#3c3489;--border:rgba(0,0,0,0.13);--border2:rgba(0,0,0,0.22);--r:8px;--rl:12px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:'Courier New',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg2);color:var(--text);min-height:100vh}
+.wrap{max-width:880px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.hero{text-align:center;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:1.5rem;margin-bottom:1.2rem}
+.hero h1{font-size:21px;font-weight:700;margin-bottom:5px}
+.hero p{font-size:13px;color:var(--text2);line-height:1.6}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.1rem}
+.stat{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);padding:11px;text-align:center}
+.stat-n{font-size:21px;font-weight:700}.stat-l{font-size:11px;color:var(--text2);margin-top:2px}
+.tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1rem}
+.tab{padding:8px 15px;border:0.5px solid var(--border2);border-radius:var(--r);font-size:13px;cursor:pointer;background:var(--bg);color:var(--text2);font-family:var(--font);transition:all .15s}
+.tab:hover{background:var(--bg2)}.tab.on{background:var(--info-bg);border-color:#b5d4f4;color:var(--info-text);font-weight:600}
+.sec{display:none}.sec.on{display:block}
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:1rem 1.2rem;margin-bottom:1rem}
+.card-title{font-size:15px;font-weight:600;margin-bottom:12px;padding-bottom:8px;border-bottom:0.5px solid var(--border)}
+.stepper{display:flex;border:0.5px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:1.1rem}
+.stp{flex:1;padding:9px 3px;font-size:11px;text-align:center;cursor:pointer;border:none;background:var(--bg);color:var(--text2);border-right:0.5px solid var(--border);font-family:var(--font);line-height:1.3;transition:all .15s}
+.stp:last-child{border-right:none}.stp.done{background:var(--success-bg);color:var(--success-text)}.stp.on{background:var(--info-bg);color:var(--info-text);font-weight:600}
+.stp-n{display:block;font-size:10px;opacity:.7;margin-bottom:1px}
+.pg{display:none}.pg.on{display:block}
+.lbl{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:4px;margin-top:12px;display:block}.lbl:first-child{margin-top:0}
+input[type=text],input[type=date],textarea,select{width:100%;padding:8px 10px;border:0.5px solid var(--border2);border-radius:var(--r);font-size:13px;background:var(--bg);color:var(--text);font-family:var(--font);outline:none;transition:border-color .15s}
+input:focus,textarea:focus,select:focus{border-color:#378add}
+textarea{resize:vertical}
+.r2{display:flex;gap:8px}.r2>*{flex:1}
+.chk{display:flex;align-items:center;gap:8px;margin-top:7px}
+.chk input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:#378add;flex-shrink:0}
+.chk label{font-size:13px;cursor:pointer}
+.prob-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:6px}
+.prob{border:0.5px solid var(--border);border-radius:var(--r);padding:9px 11px;cursor:pointer;transition:all .15s;background:var(--bg)}
+.prob:hover{background:var(--bg2)}.prob.on{border-color:#f09595;background:var(--danger-bg)}.prob.on .pt{color:var(--danger-text)}
+.pt{font-size:13px;font-weight:600;margin-bottom:1px}.pd{font-size:11px;color:var(--text2)}
+.det{margin-top:7px;padding:10px;border:0.5px solid var(--border);border-radius:var(--r);background:var(--bg2);display:none}.det.on{display:block}
+.btn{padding:8px 16px;border:0.5px solid var(--border2);border-radius:var(--r);font-size:13px;cursor:pointer;background:var(--bg);color:var(--text);font-family:var(--font);transition:all .15s}
+.btn:hover{background:var(--bg2)}.btn-p{background:var(--info-bg);border-color:#b5d4f4;color:var(--info-text);font-weight:600}
+.btn-s{background:var(--success-bg);border-color:#c0dd97;color:var(--success-text);font-weight:600}
+.btn-d{background:var(--danger-bg);border-color:#f7c1c1;color:var(--danger-text)}.btn-sm{padding:4px 9px;font-size:12px}
+.nav{display:flex;justify-content:space-between;margin-top:1rem;gap:8px;align-items:center}
+.info{padding:9px 12px;border-radius:var(--r);font-size:13px;background:var(--info-bg);color:var(--info-text);margin-bottom:1rem;line-height:1.5}
+.warn{padding:9px 12px;border-radius:var(--r);font-size:13px;background:var(--warn-bg);color:var(--warn-text);margin-top:10px;line-height:1.5}
+.ok{padding:9px 12px;border-radius:var(--r);font-size:13px;background:var(--success-bg);color:var(--success-text);margin-bottom:8px}
+.upload-zone{border:1.5px dashed var(--border2);border-radius:var(--rl);padding:1.2rem;text-align:center;cursor:pointer;transition:all .15s;margin-top:6px;background:var(--bg);display:block}
+.upload-zone:hover{background:var(--bg2);border-color:#888}
+.upload-zone input[type=file]{display:none}
+.uz-icon{font-size:28px;display:block;margin-bottom:4px}
+.file-list{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.file-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r)}
+.file-thumb{width:40px;height:40px;object-fit:cover;border-radius:4px;flex-shrink:0}
+.file-ph{width:40px;height:40px;border-radius:4px;flex-shrink:0;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px}
+.file-info{flex:1;min-width:0}.fname{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fsize{font-size:11px;color:var(--text2)}
+.tit-card{border:0.5px solid var(--border);border-radius:var(--rl);padding:12px;margin-bottom:10px;background:var(--bg)}
+.tit-card.pri{border-color:#b5d4f4;background:var(--info-bg)}
+.tit-lbl{font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.tit-card.pri .tit-lbl{color:var(--info-text)}
+.add-tit{border:1.5px dashed var(--border2);border-radius:var(--rl);padding:10px;text-align:center;cursor:pointer;font-size:13px;color:var(--text2);margin-bottom:12px;transition:all .15s;background:transparent;width:100%;font-family:var(--font)}
+.add-tit:hover{background:var(--bg2);color:var(--text)}
+.divider{border:none;border-top:0.5px solid var(--border);margin:14px 0}
+.case-block{border:0.5px solid var(--border);border-radius:var(--rl);margin-bottom:1rem;overflow:hidden;background:var(--bg)}
+.case-hdr{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;background:var(--bg2);cursor:pointer;gap:8px}
+.case-hdr:hover{background:var(--bg3)}
+.case-name{font-size:14px;font-weight:600}.case-meta{font-size:12px;color:var(--text2);margin-top:1px}
+.case-badges{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.b-i{background:var(--info-bg);color:var(--info-text)}.b-w{background:var(--warn-bg);color:var(--warn-text)}
+.b-d{background:var(--danger-bg);color:var(--danger-text)}.b-s{background:var(--success-bg);color:var(--success-text)}
+.b-p{background:var(--purple-bg);color:var(--purple-text)}.b-g{background:var(--bg3);color:var(--text2)}
+.case-body{padding:14px}.case-body.hide{display:none}
+.tp{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tp-pill{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;border:0.5px solid var(--border);background:var(--bg2);font-size:12px}
+.av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.av-p{background:var(--info-bg);color:var(--info-text)}.av-s{background:var(--purple-bg);color:var(--purple-text)}
+.prob-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.db-bar{display:flex;align-items:center;gap:6px;font-size:12px;padding:7px 11px;border-radius:var(--r);margin-bottom:1rem}
+.db-bar.ok{background:var(--success-bg);color:var(--success-text)}
+.db-bar.err{background:var(--danger-bg);color:var(--danger-text)}
+.db-bar.loading{background:var(--bg3);color:var(--text2)}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:#378add;border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:2rem;color:var(--text2);font-size:14px}
+.legal-steps{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:14px;margin-top:1rem}
+.legal-steps h3{font-size:14px;font-weight:600;margin-bottom:10px}
+.legal-steps ol{padding-left:18px}
+.legal-steps li{font-size:13px;color:var(--text2);margin-bottom:8px;line-height:1.5}
+.legal-steps li strong{color:var(--text)}.legal-steps a{color:#185fa5}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}.prob-grid{grid-template-columns:1fr}.r2{flex-direction:column}.stepper{flex-wrap:wrap}.stp{flex:none;width:50%;border-bottom:0.5px solid var(--border)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hero">
+  <div style="font-size:26px;margin-bottom:6px">🇧🇷⚖️</div>
+  <h1>Processo Coletivo — Fraude em Aluguel de Carro</h1>
+  <p>Preencha o formulário com seu relato e provas.<br>Tudo fica salvo automaticamente — qualquer pessoa com este link pode registrar seu caso.</p>
+</div>
+
+<div id="db-bar" class="db-bar loading"><span class="spin"></span> &nbsp;Conectando ao banco de dados...</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-n" id="st-c">0</div><div class="stat-l">Casos salvos</div></div>
+  <div class="stat"><div class="stat-n" id="st-p">0</div><div class="stat-l">Pessoas lesadas</div></div>
+  <div class="stat"><div class="stat-n" id="st-v">$0</div><div class="stat-l">Total lesado</div></div>
+  <div class="stat"><div class="stat-n" id="st-a">0</div><div class="stat-l">Arquivos</div></div>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="mTab('painel',this)">Painel de casos</button>
+  <button class="tab" onclick="mTab('relato',this)">+ Novo relato</button>
+  <button class="tab" onclick="mTab('exportar',this)">Exportar para o advogado</button>
+</div>
+
+<!-- PAINEL -->
+<div class="sec on" id="sec-painel">
+  <div id="painel-content"><div class="empty"><span class="spin"></span><br><br>Carregando casos...</div></div>
+</div>
+
+<!-- RELATO -->
+<div class="sec" id="sec-relato">
+  <div class="stepper">
+    <button class="stp on" onclick="gStep(0)"><span class="stp-n">1</span>Titulares</button>
+    <button class="stp" onclick="gStep(1)"><span class="stp-n">2</span>Carro</button>
+    <button class="stp" onclick="gStep(2)"><span class="stp-n">3</span>Problemas</button>
+    <button class="stp" onclick="gStep(3)"><span class="stp-n">4</span>Provas</button>
+    <button class="stp" onclick="gStep(4)"><span class="stp-n">5</span>Valores</button>
+    <button class="stp" onclick="gStep(5)"><span class="stp-n">6</span>Concluído</button>
+  </div>
+
+  <div class="pg on" id="pg-0">
+    <div class="info">Mesmo contrato com mais de uma pessoa? Adicione todos — cada um terá seu relato individual.</div>
+    <div id="tit-list">
+      <div class="tit-card pri"><div class="tit-lbl">Titular principal</div>
+        <div class="r2">
+          <div><span class="lbl" style="margin-top:0">Nome completo</span><input type="text" id="t0-name" placeholder="Seu nome completo"></div>
+          <div><span class="lbl" style="margin-top:0">WhatsApp</span><input type="text" id="t0-contact" placeholder="+61 ..."></div>
+        </div>
+      </div>
+    </div>
+    <button class="add-tit" onclick="addTit()">+ Adicionar co-titular (namorado/a, cônjuge, colega no mesmo contrato)</button>
+    <hr class="divider">
+    <span class="lbl">Tipo de acordo</span>
+    <select id="f-deal"><option value="">— Selecione —</option><option value="aluguel semanal">Aluguel semanal</option><option value="aluguel mensal">Aluguel mensal</option><option value="rent to own">Rent to own (compra parcelada)</option><option value="compra direta">Compra direta</option><option value="outro">Outro</option></select>
+    <span class="lbl">Situação atual com o carro</span>
+    <select id="f-status"><option value="">— Selecione —</option><option value="ainda com o carro">Ainda está com o carro</option><option value="devolveu">Devolveu o carro</option><option value="carro tomado">O carro foi tomado/recolhido</option><option value="nunca recebeu">Nunca recebeu o carro</option></select>
+    <div class="r2" style="margin-top:4px">
+      <div><span class="lbl">Início do acordo</span><input type="date" id="f-start"></div>
+      <div><span class="lbl">Data do problema principal</span><input type="date" id="f-end"></div>
+    </div>
+    <div class="nav"><span></span><button class="btn btn-p" onclick="gStep(1)">Próximo →</button></div>
+  </div>
+
+  <div class="pg" id="pg-1">
+    <span class="lbl">Modelo e cor do carro</span><input type="text" id="f-model" placeholder="Ex: Toyota Corolla 2015, prata">
+    <div class="r2">
+      <div><span class="lbl">Placa</span><input type="text" id="f-plate" placeholder="Ex: ABC 123"></div>
+      <div><span class="lbl">REGO</span><select id="f-rego"><option value="">—</option><option value="REGO válido">Válido</option><option value="sem REGO">Sem REGO</option><option value="REGO vencido">Vencido</option><option value="REGO desconhecido">Não sei</option></select></div>
+    </div>
+    <span class="lbl">Contato com o golpista via</span>
+    <div class="chk"><input type="checkbox" id="ch-wa"><label for="ch-wa">WhatsApp (principal)</label></div>
+    <div class="chk"><input type="checkbox" id="ch-sms"><label for="ch-sms">SMS</label></div>
+    <div class="chk"><input type="checkbox" id="ch-em"><label for="ch-em">E-mail</label></div>
+    <div class="chk"><input type="checkbox" id="ch-pess"><label for="ch-pess">Pessoalmente</label></div>
+    <span class="lbl">Havia contrato escrito?</span>
+    <select id="f-contract"><option value="">—</option><option value="contrato formal assinado">Sim, formal assinado</option><option value="acordo informal">Sim, mas simples/informal</option><option value="só WhatsApp/verbal">Só WhatsApp ou verbal</option><option value="nenhum contrato">Nenhum contrato</option></select>
+    <span class="lbl">Condição do carro ao receber</span>
+    <textarea id="f-cond" placeholder="Defeitos visíveis, problemas mecânicos, estado geral..." style="min-height:70px"></textarea>
+    <div class="nav"><button class="btn" onclick="gStep(0)">← Voltar</button><button class="btn btn-p" onclick="gStep(2)">Próximo →</button></div>
+  </div>
+
+  <div class="pg" id="pg-2">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:10px">Selecione todos os problemas enfrentados:</p>
+    <div class="prob-grid">
+      <div class="prob" id="pb-bond" onclick="tProb('bond')"><div class="pt">Bond retido</div><div class="pd">Não devolveram o bond/caução</div></div>
+      <div class="prob" id="pb-multa" onclick="tProb('multa')"><div class="pt">Multas / tolls indevidos</div><div class="pd">Cobranças indevidas</div></div>
+      <div class="prob" id="pb-mec" onclick="tProb('mec')"><div class="pt">Defeitos mecânicos</div><div class="pd">Problemas não informados</div></div>
+      <div class="prob" id="pb-rego" onclick="tProb('rego')"><div class="pt">Sem REGO / REGO inválido</div><div class="pd">Carro irregular na via</div></div>
+      <div class="prob" id="pb-doc" onclick="tProb('doc')"><div class="pt">Problemas com documentos</div><div class="pd">Transferência, título, papelada</div></div>
+      <div class="prob" id="pb-rto" onclick="tProb('rto')"><div class="pt">Rent to own não cumprido</div><div class="pd">Pagou mas não transferiu</div></div>
+      <div class="prob" id="pb-ne" onclick="tProb('ne')"><div class="pt">Carro não entregue</div><div class="pd">Pagou e nunca recebeu</div></div>
+      <div class="prob" id="pb-out" onclick="tProb('out')"><div class="pt">Outro problema</div><div class="pd">Não listado acima</div></div>
+    </div>
+    <div class="det" id="dt-bond"><span class="lbl">Valor do bond</span><input type="text" id="bond-v" placeholder="AUD $"><span class="lbl">Data que devia ser devolvido</span><input type="date" id="bond-d"><span class="lbl">O que aconteceu?</span><textarea id="bond-t" style="min-height:55px" placeholder="Descreva..."></textarea></div>
+    <div class="det" id="dt-multa"><span class="lbl">Valor cobrado indevidamente</span><input type="text" id="multa-v" placeholder="AUD $"><span class="lbl">Tipo</span><select id="multa-tp"><option value="multas de trânsito">Multas de trânsito</option><option value="tolls">Tolls</option><option value="multas e tolls">Ambos</option></select><span class="lbl">Detalhe</span><textarea id="multa-t" style="min-height:50px" placeholder="Descreva..."></textarea></div>
+    <div class="det" id="dt-mec"><span class="lbl">Quais defeitos?</span><textarea id="mec-t" style="min-height:65px" placeholder="Freios, motor, pneus, elétrica..."></textarea></div>
+    <div class="det" id="dt-rego"><span class="lbl">Consequências</span><textarea id="rego-t" style="min-height:55px" placeholder="Ex: multado, não conseguia trabalhar..."></textarea></div>
+    <div class="det" id="dt-doc"><span class="lbl">Qual problema?</span><textarea id="doc-t" style="min-height:55px" placeholder="Transferência não feita, título ainda no nome dele..."></textarea></div>
+    <div class="det" id="dt-rto"><span class="lbl">Total já pago</span><input type="text" id="rto-v" placeholder="AUD $"><span class="lbl">O que foi prometido e não cumprido?</span><textarea id="rto-t" style="min-height:55px" placeholder="Descreva..."></textarea></div>
+    <div class="det" id="dt-ne"><span class="lbl">Valor pago</span><input type="text" id="ne-v" placeholder="AUD $"><span class="lbl">O que foi combinado?</span><textarea id="ne-t" style="min-height:55px" placeholder="Descreva..."></textarea></div>
+    <div class="det" id="dt-out"><span class="lbl">Descreva</span><textarea id="out-t" style="min-height:65px" placeholder="Descreva..."></textarea></div>
+    <div class="nav"><button class="btn" onclick="gStep(1)">← Voltar</button><button class="btn btn-p" onclick="gStep(3)">Próximo →</button></div>
+  </div>
+
+  <div class="pg" id="pg-3">
+    <div class="info">Anexe suas provas. Os arquivos ficam salvos junto com seu relato.</div>
+    <div class="card" style="margin-top:0">
+      <div class="card-title">💬 Conversas de WhatsApp</div>
+      <div style="padding:8px 10px;background:var(--success-bg);border-radius:var(--r);font-size:12px;color:var(--success-text);margin-bottom:8px"><strong>Como exportar:</strong> Abra a conversa → ⋮ → "Mais" → "Exportar conversa" → salva o .zip e anexa aqui</div>
+      <label class="upload-zone" for="up-zip">
+        <input type="file" id="up-zip" accept=".zip" multiple onchange="handleZip(this)">
+        <span class="uz-icon">📦</span>
+        <strong style="font-size:13px">Selecionar .zip exportado do WhatsApp</strong>
+        <p>O texto da conversa é extraído automaticamente</p>
+      </label>
+      <div id="zip-loading" style="display:none;padding:8px;font-size:13px;color:var(--info-text)"><span class="spin"></span> Extraindo conversa...</div>
+      <div id="zip-results"></div>
+      <label class="upload-zone" for="up-wa" style="margin-top:8px">
+        <input type="file" id="up-wa" accept="image/*,.pdf" multiple onchange="addFiles(this,'whatsapp','💬')">
+        <span class="uz-icon">💬</span>
+        <strong style="font-size:13px">Ou selecionar prints/screenshots</strong>
+        <p>Fotos das conversas</p>
+      </label>
+      <div class="file-list" id="fl-wa"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">💳 Comprovantes de pagamento</div>
+      <label class="upload-zone" for="up-pag">
+        <input type="file" id="up-pag" accept="image/*,.pdf" multiple onchange="addFiles(this,'pagamento','💳')">
+        <span class="uz-icon">💳</span>
+        <strong style="font-size:13px">Selecionar comprovantes</strong>
+        <p>Transferências, recibos, PayID, PayPal</p>
+      </label>
+      <div class="file-list" id="fl-pag"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📄 Contratos e acordos</div>
+      <label class="upload-zone" for="up-cont">
+        <input type="file" id="up-cont" accept="image/*,.pdf" multiple onchange="addFiles(this,'contrato','📄')">
+        <span class="uz-icon">📄</span>
+        <strong style="font-size:13px">Selecionar contratos</strong>
+        <p>PDF ou foto do contrato</p>
+      </label>
+      <div class="file-list" id="fl-cont"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📸 Fotos do carro / outros</div>
+      <label class="upload-zone" for="up-foto">
+        <input type="file" id="up-foto" accept="image/*,.pdf" multiple onchange="addFiles(this,'foto','📸')">
+        <span class="uz-icon">📸</span>
+        <strong style="font-size:13px">Selecionar fotos</strong>
+        <p>Estado do carro, defeitos, anúncios</p>
+      </label>
+      <div class="file-list" id="fl-foto"></div>
+    </div>
+    <span class="lbl">Observações sobre as provas</span>
+    <textarea id="f-proof" placeholder="Descreva o que cada prova mostra, se necessário..." style="min-height:60px"></textarea>
+    <div class="nav"><button class="btn" onclick="gStep(2)">← Voltar</button><button class="btn btn-p" onclick="gStep(4)">Próximo →</button></div>
+  </div>
+
+  <div class="pg" id="pg-4">
+    <span class="lbl">Total pago ao golpista</span><input type="text" id="f-total" placeholder="AUD $">
+    <span class="lbl">Valor estimado perdido / não recuperado</span><input type="text" id="f-lost" placeholder="AUD $">
+    <span class="lbl">Formas de pagamento utilizadas</span>
+    <div class="chk"><input type="checkbox" id="pay-tr"><label for="pay-tr">Bank transfer</label></div>
+    <div class="chk"><input type="checkbox" id="pay-ca"><label for="pay-ca">Cash</label></div>
+    <div class="chk"><input type="checkbox" id="pay-pi"><label for="pay-pi">PayID</label></div>
+    <div class="chk"><input type="checkbox" id="pay-pp"><label for="pay-pp">PayPal</label></div>
+    <span class="lbl">Tem comprovantes?</span>
+    <select id="f-rec"><option value="">—</option><option value="todos os comprovantes">Sim, todos</option><option value="alguns comprovantes">Alguns</option><option value="sem comprovantes">Não tenho</option></select>
+    <span class="lbl">Outras vítimas que você conhece</span>
+    <textarea id="f-wit" placeholder="Nomes ou contatos de outras pessoas prejudicadas..." style="min-height:50px"></textarea>
+    <span class="lbl">Informações adicionais</span>
+    <textarea id="f-extra" placeholder="Qualquer outro detalhe relevante para o processo..." style="min-height:60px"></textarea>
+    <div class="nav"><button class="btn" onclick="gStep(3)">← Voltar</button><button class="btn btn-p" id="save-btn" onclick="saveCase()">Salvar relato →</button></div>
+  </div>
+
+  <div class="pg" id="pg-5">
+    <div class="ok" id="saved-msg">✓ Relato salvo com sucesso!</div>
+    <div style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:1.2rem;margin-bottom:1rem">
+      <div style="font-size:15px;font-weight:600;margin-bottom:8px">Próximos passos</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.9">
+        1. Seu relato já está salvo no banco de dados ✓<br>
+        2. Guarde seus arquivos originais no celular<br>
+        3. Avise a Elizabeth que você preencheu o formulário<br>
+        4. Aguarde — ela vai reunir todos os relatos e gerar os documentos oficiais com o advogado
+      </div>
+    </div>
+    <div class="warn">⚠️ Não descarte nenhuma prova original. Os documentos finais serão gerados com base nos seus relatos.</div>
+    <div class="nav" style="margin-top:1rem">
+      <button class="btn" onclick="mTab('painel',null);renderPanel()">Ver todos os casos</button>
+      <button class="btn btn-p" onclick="resetForm()">+ Registrar outro relato</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORTAR -->
+<div class="sec" id="sec-exportar">
+  <div class="card">
+    <div class="card-title">Exportar todos os relatos</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:4px;line-height:1.6">Gera um texto completo com todos os casos salvos.<br>Cole esse texto aqui no Claude e peça para gerar as declarações oficiais em inglês.</p>
+    <button class="btn btn-p" style="margin-top:10px" onclick="exportAll()">Exportar todos os relatos</button>
+    <div id="exp-out" style="display:none;margin-top:10px">
+      <textarea id="exp-txt" style="min-height:300px;font-size:12px;font-family:var(--mono);width:100%;padding:10px;border:0.5px solid var(--border);border-radius:var(--r);background:var(--bg2);color:var(--text)" readonly></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center">
+        <button class="btn btn-s" onclick="copyEl('exp-txt')">Copiar tudo</button>
+        <span style="font-size:12px;color:var(--text2)">Cole no Claude e peça: "Gera as declarações oficiais em inglês para cada caso"</span>
+      </div>
+    </div>
+  </div>
+  <div class="legal-steps">
+    <h3>Próximos passos em NSW</h3>
+    <ol>
+      <li><strong>NSW Fair Trading</strong> — <a href="https://www.fair.trading.nsw.gov.au" target="_blank">fair.trading.nsw.gov.au</a></li>
+      <li><strong>ACCC</strong> — <a href="https://www.accc.gov.au/consumers/complaints-problems" target="_blank">accc.gov.au</a></li>
+      <li><strong>NSW Police</strong> — <a href="https://www.police.nsw.gov.au" target="_blank">police.nsw.gov.au</a></li>
+      <li><strong>Legal Aid NSW</strong> — <a href="https://www.legalaid.nsw.gov.au" target="_blank">legalaid.nsw.gov.au</a> (gratuito)</li>
+      <li><strong>NCAT</strong> — <a href="https://www.ncat.nsw.gov.au" target="_blank">ncat.nsw.gov.au</a> (até $30.000)</li>
+      <li><strong>Justice of the Peace (JP)</strong> — assinatura gratuita em bibliotecas e Service NSW</li>
+    </ol>
+  </div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getFirestore,collection,addDoc,getDocs,orderBy,query,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const cfg={apiKey:"AIzaSyC7a169NV_7MqnpOSaZEFLSVwmtmWXHy48",authDomain:"rental-car-rio.firebaseapp.com",projectId:"rental-car-rio",storageBucket:"rental-car-rio.firebasestorage.app",messagingSenderId:"1029309247712",appId:"1:1029309247712:web:f54822ad27801ea38c2085"};
+const app=initializeApp(cfg);
+const db=getFirestore(app);
+window._db=db;window._col=collection;window._add=addDoc;window._get=getDocs;window._q=query;window._ob=orderBy;window._ts=serverTimestamp;
+try{
+  const snap=await window._get(window._q(window._col(window._db,'casos'),window._ob('createdAt','desc')));
+  window._cases=[];
+  snap.forEach(d=>window._cases.push({id:d.id,...d.data()}));
+  window.renderPanel();window.updateStats();
+  const bar=document.getElementById('db-bar');
+  bar.className='db-bar ok';bar.innerHTML='✓ Conectado ao banco de dados — relatos salvos automaticamente';
+}catch(e){
+  const bar=document.getElementById('db-bar');
+  bar.className='db-bar err';bar.innerHTML='⚠️ Erro de conexão: '+e.message;
+  window._cases=[];window.renderPanel();
+}
+</script>
+<script>
+window._cases=window._cases||[];
+let selProbs=new Set();
+let titCount=1;
+let atts={whatsapp:[],pagamento:[],contrato:[],foto:[]};
+let zips=[];
+
+window.mTab=function(name,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sec-'+name).classList.add('on');
+  if(el)el.classList.add('on');
+  else document.querySelectorAll('.tab').forEach(t=>{if(t.textContent.includes('Painel'))t.classList.add('on');});
+  if(name==='painel')window.renderPanel();
+};
+
+window.gStep=function(n){
+  document.querySelectorAll('.pg').forEach((p,i)=>p.classList.toggle('on',i===n));
+  document.querySelectorAll('.stp').forEach((b,i)=>{b.classList.remove('on','done');if(i===n)b.classList.add('on');else if(i<n)b.classList.add('done');});
+};
+
+window.addTit=function(){
+  const idx=titCount++;
+  const d=document.createElement('div');d.className='tit-card';d.id='tc-'+idx;
+  d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="tit-lbl">Co-titular ${idx}</div><button class="btn btn-sm btn-d" onclick="document.getElementById('tc-${idx}').remove()">Remover</button></div><div class="r2"><div><span class="lbl" style="margin-top:0">Nome completo</span><input type="text" id="t${idx}-name" placeholder="Nome"></div><div><span class="lbl" style="margin-top:0">WhatsApp</span><input type="text" id="t${idx}-contact" placeholder="+61 ..."></div></div>`;
+  document.getElementById('tit-list').appendChild(d);
+};
+
+function getTits(){
+  const l=[];
+  for(let i=0;i<titCount;i++){const el=document.getElementById('t'+i+'-name');if(el&&el.value.trim())l.push({name:el.value.trim(),contact:(document.getElementById('t'+i+'-contact')||{}).value||''});}
+  return l;
+}
+
+window.tProb=function(id){
+  const c=document.getElementById('pb-'+id);const d=document.getElementById('dt-'+id);
+  if(selProbs.has(id)){selProbs.delete(id);c.classList.remove('on');d.classList.remove('on');}
+  else{selProbs.add(id);c.classList.add('on');d.classList.add('on');}
+};
+
+function g(id){return(document.getElementById(id)||{}).value||'';}
+function ck(id){return!!(document.getElementById(id)&&document.getElementById(id).checked);}
+function fd(d){if(!d)return'';const[y,m,day]=d.split('-');return`${day}/${m}/${y}`;}
+function nv(s){return parseFloat((s||'').replace(/[^0-9.]/g,''))||0;}
+function ini(n){return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+
+window.addFiles=function(input,cat,icon){
+  const listEl=document.getElementById('fl-'+{whatsapp:'wa',pagamento:'pag',contrato:'cont',foto:'foto'}[cat]);
+  Array.from(input.files).forEach(file=>{
+    const reader=new FileReader();
+    const obj={id:Date.now()+Math.random(),name:file.name,size:file.size,cat,icon,type:file.type,dataUrl:null};
+    atts[cat].push(obj);
+    reader.onload=e=>{
+      obj.dataUrl=e.target.result;
+      const div=document.createElement('div');div.className='file-item';div.id='fi-'+obj.id;
+      const isImg=file.type.startsWith('image/');
+      div.innerHTML=`${isImg?`<img class="file-thumb" src="${obj.dataUrl}">`:`<div class="file-ph">${icon}</div>`}<div class="file-info"><div class="fname">${file.name}</div><div class="fsize">${(file.size/1024).toFixed(1)} KB</div></div><button class="btn btn-sm btn-d" onclick="rmFile('${obj.id}','${cat}')">✕</button>`;
+      listEl.appendChild(div);window.updateStats();
+    };reader.readAsDataURL(file);
+  });input.value='';
+};
+
+window.rmFile=function(id,cat){
+  atts[cat]=atts[cat].filter(f=>String(f.id)!==String(id));
+  const el=document.getElementById('fi-'+id);if(el)el.remove();window.updateStats();
+};
+
+window.handleZip=async function(input){
+  document.getElementById('zip-loading').style.display='block';
+  for(const file of Array.from(input.files)){
+    try{
+      const zip=await JSZip.loadAsync(file);
+      let txt='';let mc=0;const mi=[];
+      for(const[n,e]of Object.entries(zip.files)){
+        if(!e.dir){
+          if(n.endsWith('.txt'))txt=await e.async('string');
+          else if(n.match(/\.(jpg|jpeg|png|gif|webp)$/i)){mc++;if(mi.length<12)mi.push({name:n,url:URL.createObjectURL(await e.async('blob'))});}
+          else if(n.match(/\.(mp4|opus|aac|m4a)$/i))mc++;
+        }
+      }
+      const conv={id:Date.now()+Math.random(),filename:file.name,chatText:txt,mediaCount:mc,mediaItems:mi};
+      zips.push(conv);
+      atts.whatsapp.push({id:conv.id,name:file.name,size:file.size,cat:'whatsapp',icon:'📦',type:'zip',dataUrl:null,isZip:true,chatPreview:txt.slice(0,3000)});
+      const lines=(txt||'').split('\n').filter(l=>l.trim());
+      const el=document.createElement('div');el.id='zip-'+conv.id;
+      el.style.cssText='border:0.5px solid var(--border);border-radius:var(--rl);margin-bottom:10px;overflow:hidden;background:var(--bg)';
+      el.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--success-bg);gap:8px"><div><div style="font-size:13px;font-weight:600;color:var(--success-text)">📦 ${file.name}</div><div style="font-size:12px;color:var(--success-text);margin-top:1px">${lines.length} mensagens · ${mc} mídias</div></div><button class="btn btn-sm btn-d" onclick="rmZip('${conv.id}')">Remover</button></div>${mi.length?`<div style="display:flex;gap:5px;flex-wrap:wrap;padding:8px 12px;border-bottom:0.5px solid var(--border)">${mi.map(m=>`<img src="${m.url}" style="width:55px;height:55px;object-fit:cover;border-radius:5px;border:0.5px solid var(--border)">`).join('')}</div>`:''}<div style="padding:10px 12px"><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px">PRÉVIA</div><pre style="font-size:11px;line-height:1.6;white-space:pre-wrap;max-height:180px;overflow-y:auto;background:var(--bg2);padding:8px;border-radius:var(--r);border:0.5px solid var(--border)">${lines.slice(0,30).join('\n').replace(/</g,'&lt;')}${lines.length>30?'\n... mais '+(lines.length-30)+' mensagens':''}</pre></div>`;
+      document.getElementById('zip-results').appendChild(el);window.updateStats();
+    }catch(e){document.getElementById('zip-results').innerHTML+=`<div style="color:var(--danger-text);font-size:13px;padding:8px">Erro: ${e.message}</div>`;}
+  }
+  document.getElementById('zip-loading').style.display='none';input.value='';
+};
+
+window.rmZip=function(id){
+  zips=zips.filter(z=>String(z.id)!==String(id));
+  atts.whatsapp=atts.whatsapp.filter(f=>String(f.id)!==String(id));
+  const el=document.getElementById('zip-'+id);if(el)el.remove();window.updateStats();
+};
+
+function buildProbs(){
+  const p=[];
+  if(selProbs.has('bond'))p.push({id:'bond',label:'Bond retido',value:g('bond-v'),date:g('bond-d'),detail:g('bond-t')});
+  if(selProbs.has('multa'))p.push({id:'multa',label:'Multas/tolls indevidos',value:g('multa-v'),tipo:g('multa-tp'),detail:g('multa-t')});
+  if(selProbs.has('mec'))p.push({id:'mec',label:'Defeitos mecânicos',detail:g('mec-t')});
+  if(selProbs.has('rego'))p.push({id:'rego',label:'Sem REGO/REGO inválido',detail:g('rego-t')});
+  if(selProbs.has('doc'))p.push({id:'doc',label:'Problemas com documentos',detail:g('doc-t')});
+  if(selProbs.has('rto'))p.push({id:'rto',label:'Rent to own não cumprido',value:g('rto-v'),detail:g('rto-t')});
+  if(selProbs.has('ne'))p.push({id:'ne',label:'Carro não entregue',value:g('ne-v'),detail:g('ne-t')});
+  if(selProbs.has('out'))p.push({id:'out',label:'Outro',detail:g('out-t')});
+  return p;
+}
+
+window.saveCase=async function(){
+  const tits=getTits();
+  if(!tits.length){alert('Informe o nome do titular principal.');window.gStep(0);return;}
+  const btn=document.getElementById('save-btn');btn.textContent='Salvando...';btn.disabled=true;
+  const pays=[];
+  if(ck('pay-tr'))pays.push('bank transfer');if(ck('pay-ca'))pays.push('cash');
+  if(ck('pay-pi'))pays.push('PayID');if(ck('pay-pp'))pays.push('PayPal');
+  const contacts=[];
+  if(ck('ch-wa'))contacts.push('WhatsApp');if(ck('ch-sms'))contacts.push('SMS');
+  if(ck('ch-em'))contacts.push('e-mail');if(ck('ch-pess'))contacts.push('pessoalmente');
+  const attMeta={
+    whatsapp:atts.whatsapp.map(f=>({name:f.name,size:f.size,isZip:!!f.isZip,chatPreview:f.chatPreview||''})),
+    pagamento:atts.pagamento.map(f=>({name:f.name,size:f.size})),
+    contrato:atts.contrato.map(f=>({name:f.name,size:f.size})),
+    foto:atts.foto.map(f=>({name:f.name,size:f.size}))
+  };
+  const data={titulares:tits,deal:g('f-deal'),status:g('f-status'),start:g('f-start'),end:g('f-end'),model:g('f-model'),plate:g('f-plate'),rego:g('f-rego'),contacts,contract:g('f-contract'),cond:g('f-cond'),probs:buildProbs(),attachments:attMeta,proofDesc:g('f-proof'),total:g('f-total'),lost:g('f-lost'),pays,receipts:g('f-rec'),witnesses:g('f-wit'),extra:g('f-extra'),createdAt:window._ts()};
+  try{
+    const ref=await window._add(window._col(window._db,'casos'),data);
+    window._cases.unshift({id:ref.id,...data,createdAt:new Date()});
+    window.updateStats();window.gStep(5);
+    document.getElementById('saved-msg').textContent='✓ Relato de '+tits.map(t=>t.name).join(' & ')+' salvo com sucesso!';
+  }catch(e){alert('Erro ao salvar: '+e.message);}
+  btn.textContent='Salvar relato →';btn.disabled=false;
+};
+
+window.updateStats=function(){
+  const c=window._cases||[];
+  document.getElementById('st-c').textContent=c.length;
+  document.getElementById('st-p').textContent=c.reduce((s,x)=>s+(x.titulares||[]).length,0);
+  document.getElementById('st-v').textContent='$'+Math.round(c.reduce((s,x)=>s+nv(x.total),0)).toLocaleString();
+  const dbAtts=c.reduce((s,x)=>s+Object.values(x.attachments||{}).reduce((a,b)=>a+(b||[]).length,0),0);
+  const localAtts=Object.values(atts).reduce((s,a)=>s+a.length,0);
+  document.getElementById('st-a').textContent=dbAtts+localAtts;
+};
+
+const probColors={bond:'b-w',multa:'b-w',mec:'b-d',rego:'b-d',doc:'b-d',rto:'b-d',ne:'b-d',out:'b-g'};
+
+window.renderPanel=function(){
+  const c=window._cases||[];
+  const el=document.getElementById('painel-content');
+  if(!c.length){el.innerHTML='<div class="empty">Nenhum caso registrado ainda.<br>Clique em "+ Novo relato" para começar.</div>';return;}
+  el.innerHTML=c.map((cas,i)=>{
+    const tits=cas.titulares||[];const probs=cas.probs||[];const a=cas.attachments||{};
+    const ta=Object.values(a).reduce((s,x)=>s+(x||[]).length,0);
+    const dt=cas.createdAt&&cas.createdAt.toDate?cas.createdAt.toDate().toLocaleDateString('pt-BR'):'';
+    return `<div class="case-block">
+      <div class="case-hdr" onclick="document.getElementById('cb-${cas.id}').classList.toggle('hide')">
+        <div><div class="case-name">${tits.map(t=>t.name).join(' & ')}</div>
+        <div class="case-meta">${cas.deal||''}${cas.model?' · '+cas.model:''}${cas.plate?' ('+cas.plate+')':''}${dt?' · Registrado: '+dt:''}</div></div>
+        <div class="case-badges">
+          ${tits.length>1?`<span class="badge b-p">${tits.length} titulares</span>`:''}
+          ${cas.total?`<span class="badge b-w">${cas.total}</span>`:''}
+          ${ta?`<span class="badge b-i">${ta} arquivos</span>`:''}
+          <span class="badge b-s">✓ Salvo</span>
+        </div>
+      </div>
+      <div class="case-body hide" id="cb-${cas.id}">
+        <div class="tp">${tits.map((t,i)=>`<div class="tp-pill"><div class="av ${i===0?'av-p':'av-s'}">${ini(t.name)}</div><span style="font-weight:600">${t.name}</span>${t.contact?`<span style="color:var(--text2)">${t.contact}</span>`:''}<span style="color:var(--text2)">${i===0?'principal':'co-titular'}</span></div>`).join('')}</div>
+        ${probs.length?`<div class="prob-tags">${probs.map(p=>`<span class="badge ${probColors[p.id]||'b-g'}">${p.label}${p.value?' ('+p.value+')':''}</span>`).join('')}</div>`:''}
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;font-size:13px;margin-bottom:10px">
+          ${cas.deal?`<div><span style="color:var(--text2)">Acordo:</span> ${cas.deal}</div>`:''}
+          ${cas.rego?`<div><span style="color:var(--text2)">REGO:</span> ${cas.rego}</div>`:''}
+          ${cas.start?`<div><span style="color:var(--text2)">Início:</span> ${fd(cas.start)}</div>`:''}
+          ${cas.total?`<div><span style="color:var(--text2)">Total pago:</span> ${cas.total}</div>`:''}
+          ${cas.lost?`<div><span style="color:var(--text2)">Perda:</span> ${cas.lost}</div>`:''}
+        </div>
+        ${ta?`<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px;text-transform:uppercase">Arquivos (${ta})</div><div style="display:flex;flex-wrap:wrap;gap:4px">${(a.whatsapp||[]).map(f=>`<span class="badge b-s">💬 ${f.name}</span>`).join('')}${(a.pagamento||[]).map(f=>`<span class="badge b-w">💳 ${f.name}</span>`).join('')}${(a.contrato||[]).map(f=>`<span class="badge b-i">📄 ${f.name}</span>`).join('')}${(a.foto||[]).map(f=>`<span class="badge b-g">📸 ${f.name}</span>`).join('')}</div>${(a.whatsapp||[]).filter(f=>f.isZip&&f.chatPreview).map(f=>`<div style="margin-top:8px"><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px">Conversa: ${f.name}</div><pre style="font-size:11px;line-height:1.5;white-space:pre-wrap;max-height:150px;overflow-y:auto;background:var(--bg2);padding:8px;border-radius:var(--r);border:0.5px solid var(--border)">${f.chatPreview.replace(/</g,'&lt;')}</pre></div>`).join('')}</div>`:''}
+        ${cas.cond?`<div style="font-size:13px;margin-bottom:6px"><span style="color:var(--text2);font-size:12px">Condição do carro:</span> ${cas.cond}</div>`:''}
+        ${cas.extra?`<div style="font-size:13px"><span style="color:var(--text2);font-size:12px">Obs:</span> ${cas.extra}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+};
+
+window.exportAll=function(){
+  const c=window._cases||[];
+  if(!c.length){alert('Nenhum caso para exportar.');return;}
+  const txt=`RELATOS DO PROCESSO COLETIVO — FRAUDE EM ALUGUEL DE CARRO
+Exportado em: ${new Date().toLocaleString('pt-BR')}
+Total de casos: ${c.length} | Total de pessoas: ${c.reduce((s,x)=>s+(x.titulares||[]).length,0)} | Total lesado: AUD $${Math.round(c.reduce((s,x)=>s+nv(x.total),0)).toLocaleString()}
+${'═'.repeat(60)}
+
+`+c.map((x,i)=>{
+  const tits=x.titulares||[];const probs=x.probs||[];const a=x.attachments||{};
+  const dt=x.createdAt&&x.createdAt.toDate?x.createdAt.toDate().toLocaleString('pt-BR'):'';
+  return `CASO #${i+1}: ${tits.map(t=>t.name).join(' & ')}
+Data do relato: ${dt}
+Titulares: ${tits.map((t,i)=>t.name+(t.contact?' ('+t.contact+')':'')+(i===0?' — principal':' — co-titular')).join(' | ')}
+Carro: ${x.model||'—'} | Placa: ${x.plate||'—'} | REGO: ${x.rego||'—'}
+Acordo: ${x.deal||'—'} | Período: ${fd(x.start)} a ${fd(x.end)} | Status: ${x.status||'—'}
+Contato com golpista: ${(x.contacts||[]).join(', ')||'—'}
+Contrato: ${x.contract||'—'}
+Condição do carro: ${x.cond||'—'}
+
+PROBLEMAS REPORTADOS:
+${probs.length?probs.map(p=>`  • ${p.label}${p.value?' — Valor: '+p.value:''}${p.date?' — Data: '+fd(p.date):''}${p.detail?'\n    Detalhe: '+p.detail:''}`).join('\n'):'  Nenhum registrado'}
+
+VALORES:
+  Total pago: ${x.total||'—'}
+  Perda estimada: ${x.lost||'—'}
+  Pagamento via: ${(x.pays||[]).join(', ')||'—'}
+  Comprovantes: ${x.receipts||'—'}
+
+ARQUIVOS ANEXADOS:
+  💬 WhatsApp: ${(a.whatsapp||[]).map(f=>f.name).join(', ')||'nenhum'}
+  💳 Pagamentos: ${(a.pagamento||[]).map(f=>f.name).join(', ')||'nenhum'}
+  📄 Contratos: ${(a.contrato||[]).map(f=>f.name).join(', ')||'nenhum'}
+  📸 Fotos: ${(a.foto||[]).map(f=>f.name).join(', ')||'nenhum'}
+${(a.whatsapp||[]).filter(f=>f.isZip&&f.chatPreview).map(f=>`\nCONVERSA WHATSAPP (${f.name}):\n${f.chatPreview}`).join('')}
+${x.witnesses?'\nOutras vítimas conhecidas: '+x.witnesses:''}
+${x.extra?'\nInformações adicionais: '+x.extra:''}
+${'─'.repeat(60)}`;
+}).join('\n\n');
+  document.getElementById('exp-txt').value=txt;
+  document.getElementById('exp-out').style.display='block';
+};
+
+window.resetForm=function(){
+  document.getElementById('tit-list').innerHTML=`<div class="tit-card pri"><div class="tit-lbl">Titular principal</div><div class="r2"><div><span class="lbl" style="margin-top:0">Nome completo</span><input type="text" id="t0-name" placeholder="Seu nome completo"></div><div><span class="lbl" style="margin-top:0">WhatsApp</span><input type="text" id="t0-contact" placeholder="+61 ..."></div></div></div>`;
+  titCount=1;
+  ['f-deal','f-status','f-start','f-end','f-model','f-plate','f-rego','f-contract','f-cond','f-total','f-lost','f-rec','f-wit','f-extra','f-proof','bond-v','bond-d','bond-t','multa-v','multa-t','mec-t','rego-t','doc-t','rto-v','rto-t','ne-v','ne-t','out-t'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['ch-wa','ch-sms','ch-em','ch-pess','pay-tr','pay-ca','pay-pi','pay-pp'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
+  selProbs.forEach(id=>{const c=document.getElementById('pb-'+id);if(c)c.classList.remove('on');const d=document.getElementById('dt-'+id);if(d)d.classList.remove('on');});
+  selProbs.clear();atts={whatsapp:[],pagamento:[],contrato:[],foto:[]};zips=[];
+  ['fl-wa','fl-pag','fl-cont','fl-foto'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});
+  document.getElementById('zip-results').innerHTML='';
+  window.gStep(0);
+};
+
+window.copyEl=function(id){
+  const el=document.getElementById(id);const text=el.tagName==='TEXTAREA'?el.value:el.innerText;
+  navigator.clipboard.writeText(text).then(()=>alert('Copiado! Cole no Claude e peça para gerar as declarações.')).catch(()=>{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('Copiado!');});
+};
+</script>
+</body>
+</html>
